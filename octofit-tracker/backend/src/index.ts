@@ -6,10 +6,9 @@ import teamsRouter from './routes/teams'
 import activitiesRouter from './routes/activities'
 import leaderboardRouter from './routes/leaderboard'
 import workoutsRouter from './routes/workouts'
+import connectDB from './database'
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 8000
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/octofit_db'
-
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -28,8 +27,7 @@ const API_URL = process.env.CODESPACE_NAME
 
 async function start() {
   try {
-    await mongoose.connect(MONGO_URI)
-    console.log('Connected to MongoDB at', MONGO_URI)
+    await connectDB()
     console.log('API available at', API_URL)
     app.listen(PORT, () => console.log(`Backend listening on port ${PORT}`))
   } catch (err) {
