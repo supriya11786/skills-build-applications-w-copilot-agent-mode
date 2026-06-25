@@ -1,14 +1,20 @@
 import { Router } from 'express'
+import Team from '../models/team'
 
 const router = Router()
 
-router.get('/', (_req, res) => {
-  res.json({ message: 'List teams (placeholder)', teams: [] })
+router.get('/', async (_req, res) => {
+  const teams = await Team.find().populate('members')
+  res.json({ teams })
 })
 
-router.post('/', (req, res) => {
-  const payload = req.body
-  res.status(201).json({ message: 'Create team (placeholder)', team: payload })
+router.post('/', async (req, res) => {
+  try {
+    const team = await Team.create(req.body)
+    res.status(201).json({ team })
+  } catch (err: any) {
+    res.status(400).json({ error: err.message })
+  }
 })
 
 export default router
